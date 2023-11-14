@@ -65,7 +65,7 @@ ROBOTSTXT_OBEY = True
 ITEM_PIPELINES = {
     #    "psplus.pipelines.PsplusPipeline": 300,
     #    "scrapy.pipelines.images.ImagesPipeline": 1
-    "psplus.pipelines.CustomImagesPipeline": 1
+    "psplus.pipelines.PsPlusImagesPipeline": 400
 }
 
 IMAGES_STORE = "/Users/macbook/projects/scrapy-psplus/image-store"

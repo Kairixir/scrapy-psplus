@@ -16,7 +16,7 @@ class PsplusPipeline:
         return item
 
 
-class CustomImagesPipeline(ImagesPipeline):
+class PsPlusImagesPipeline(ImagesPipeline):
     # Override the file_path method to customize the image file names
     def file_path(self, request, response=None, info=None, *, item=None):
         # The index [5:] in the super method is there to trim the beginning
@@ -24,3 +24,9 @@ class CustomImagesPipeline(ImagesPipeline):
         return (
             f"{item['unique_prefix']}_{super().file_path(request, response, info)[5:]}"
         )
+
+
+class PsStorePipeline(ImagesPipeline):
+    # Override the file_path method to customize the image file names
+    def file_path(self, request, response=None, info=None, *, item=None):
+        return f"{item['title']}_{super().file_path(request, response, info)[5:]}"
