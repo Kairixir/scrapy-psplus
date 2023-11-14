@@ -1,6 +1,8 @@
 import re
 import scrapy
 
+from urllib.parse import urlparse, urljoin
+
 
 class PsplusSpider(scrapy.Spider):
     name = "psplus"
@@ -11,12 +13,24 @@ class PsplusSpider(scrapy.Spider):
 
     def parse(self, response):
         selector = "div.tabs__tab-content div.txt-block-paragraph p.txt-style-base a::attr(href)"
-        yield from response.follow_all(selector, callback=self.parse_images)
+        yield from response.follow_all(css=selector, callback=self.parse_images)
 
     def parse_images(self, response):
-        img_urls = list(
-            filter(
+        img_urls = [
+            urljoin(response.url, link) if not urlparse(link).scheme else link
+            for link in filter(
                 lambda link: not re.search("(ratings|thumb=true)", link),
                 response.css("img::attr(src)").getall(),
             )
+        ]
+        title = "".join(
+            s.lower() for s in response.css("title::text").get(default="").strip() if s.isalnum()
+        )
+
+        yield {"image_urls": img_urls, "unique_prefix": title}
+
+    # Override the file_path method to customize the image file names
+    def file_path(self, request, response=None, info=None, *, item=None):
+        return (
+            f"{item['unique_prefix']}_{super().file_path(request, response, info)}.jpg"
         )
