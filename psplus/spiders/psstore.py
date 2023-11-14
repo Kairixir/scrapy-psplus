@@ -26,4 +26,8 @@ class PsstoreSpider(scrapy.Spider):
             lambda title: "".join(c.lower() for c in title if c.isalnum()), titles
         )
         for img_url in img_urls:
-            yield {"image_urls": [img_url], "title": next(titles)}
+            yield {
+                "image_urls": [img_url],
+                "title": next(titles),
+                "n": response.url.split("/")[-1],
+            }

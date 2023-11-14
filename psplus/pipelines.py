@@ -29,4 +29,4 @@ class PsPlusImagesPipeline(ImagesPipeline):
 class PsStorePipeline(ImagesPipeline):
     # Override the file_path method to customize the image file names
     def file_path(self, request, response=None, info=None, *, item=None):
-        return f"{item['title']}_{super().file_path(request, response, info)[5:]}"
+        return f"{item['title']}_{item['n']}_{super().file_path(request, response, info)[5:]}"
