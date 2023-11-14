@@ -24,13 +24,9 @@ class PsplusSpider(scrapy.Spider):
             )
         ]
         title = "".join(
-            s.lower() for s in response.css("title::text").get(default="").strip() if s.isalnum()
+            s.lower()
+            for s in response.css("title::text").get(default="").strip()
+            if s.isalnum()
         )
 
         yield {"image_urls": img_urls, "unique_prefix": title}
-
-    # Override the file_path method to customize the image file names
-    def file_path(self, request, response=None, info=None, *, item=None):
-        return (
-            f"{item['unique_prefix']}_{super().file_path(request, response, info)}.jpg"
-        )
